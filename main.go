@@ -11,34 +11,10 @@ import (
 )
 
 func main() {
-	r := u.NewRequestPdf("")
-
-	//html template path
-	templatePath := "templates/sample.html"
-
-	//path for download pdf
-	outputPath := "storage/exampl2.pdf"
-
-	//html template data
-	templateData := struct {
-		Title       string
-		Description string
-		Company     string
-		Contact     string
-		Country     string
-	}{
-		Title:       "HTML to PDF generator",
-		Description: "This is the simple HTML to PDF file.",
-		Company:     "Jhon Lewis",
-		Contact:     "Maria Anders",
-		Country:     "Germany",
-	}
-
-	if err := r.ParseTemplate(templatePath, templateData); err == nil {
-		err := r.GeneratePDF(outputPath)
-		if err != nil {
-			fmt.Println("unable to print pdf")
-		}
+	http.HandleFunc("/testing", testing)
+	err := http.ListenAndServe(":9000", nil)
+	if err != nil {
+		fmt.Println("error")
 	}
 }
 
@@ -88,4 +64,36 @@ func exportHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+}
+
+func testing(w http.ResponseWriter, r *http.Request) {
+	b := u.NewRequestPdf("")
+
+	//html template path
+	templatePath := "templates/sample.html"
+
+	//path for download pdf
+	outputPath := "storage/exampl2.pdf"
+
+	//html template data
+	templateData := struct {
+		Title       string
+		Description string
+		Company     string
+		Contact     string
+		Country     string
+	}{
+		Title:       "HTML to PDF generator",
+		Description: "This is the simple HTML to PDF file.",
+		Company:     "Jhon Lewis",
+		Contact:     "Maria Anders",
+		Country:     "Germany",
+	}
+
+	if err := b.ParseTemplate(templatePath, templateData); err == nil {
+		err := b.GeneratePDF(outputPath)
+		if err != nil {
+			fmt.Println("unable to print pdf")
+		}
+	}
 }
